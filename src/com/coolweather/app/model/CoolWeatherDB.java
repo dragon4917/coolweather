@@ -11,7 +11,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /*
- * 常用数据库操作
+ * 数据库帮助类(常用数据库操作)
  */
 public class CoolWeatherDB {
 	// 数据库名
@@ -58,7 +58,6 @@ public class CoolWeatherDB {
 				province.setId(cursor.getInt(cursor.getColumnIndex("id")));
 				province.setProvinceName(cursor.getString(cursor.getColumnIndex("province_name")));
 				province.setProvinceCode(cursor.getString(cursor.getColumnIndex("province_code")));
-				;
 				list.add(province);
 			} while (cursor.moveToNext());
 		}
@@ -79,7 +78,8 @@ public class CoolWeatherDB {
 	// 从数据库读取某省份下所有的城市信息
 	public List<City> loadCities(int provinceId) {
 		List<City> list = new ArrayList<City>();
-		Cursor cursor = db.query("City", null, null, null, null, null, null);
+		Cursor cursor = db.query("City", null, "province_id = ?", new String[] { String.valueOf(provinceId) }, null,
+				null, null);
 		if (cursor.moveToFirst()) {
 			do {
 				City city = new City();
@@ -107,7 +107,7 @@ public class CoolWeatherDB {
 	// 从数据库中读取某城市下所有的县信息
 	public List<County> loadCounties(int cityId) {
 		List<County> list = new ArrayList<County>();
-		Cursor cursor = db.query("County", null, null, null, null, null, null);
+		Cursor cursor = db.query("County", null, "city_id = ?", new String[]{String.valueOf(cityId)}, null, null, null);
 		if (cursor.moveToFirst()) {
 			do {
 				County county = new County();
